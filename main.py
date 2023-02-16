@@ -4,6 +4,7 @@ from bot_token import * # import secret file
  # defining intents
 intents = discord.Intents.default()
 intents.members = True
+intents.message_content = True
 
 client = discord.Client(intents = intents)
 
@@ -32,9 +33,17 @@ async def on_ready():
         print("User not found")
         return
     # Send the message to the channel
-    await channel.send(f'Hello, {user.mention}!')
+    await channel.send(f'Hello I am the bot!, {user.mention}!')
 
-
+# On message functionality to respond to messages in the appropriate channel from the appropriate user
+@client.event
+async def on_message(message):
+    if message.channel.name == "bots":
+        if message.author.id == Balton:
+            user = client.get_user(Balton)
+            print(message.content)
+            await message.channel.send(f"Hey {user.mention}, did you say '{message.content}'?")
+        
 # Run the bot
 client.run(token)
 
