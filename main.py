@@ -40,10 +40,10 @@ async def on_ready():
         print("Couldn't connect to #bench-list")
         return
     # here we are in bench lists
-    messages = await channel.history(limit=200).flatten()
+    messages = [message async for message in channel.history(limit=200)]
     for msg in messages:
-        if word in msg.content:
-            print(msg.jump_url)
+        if(msg.author.id == Deego):
+            print(msg.content)
 
 # On message functionality to respond to messages in the appropriate channel from the appropriate user
 @client.event
