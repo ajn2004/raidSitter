@@ -33,7 +33,17 @@ async def on_ready():
         print("User not found")
         return
     # Send the message to the channel
-    await channel.send(f'Hello I am the bot!, {user.mention}!')
+    # await channel.send(f'Hello I am the bot!, {user.mention}!')
+    # Now I think we will want to have the bot scrape all previous messages from Deego in bench-list
+    channel = discord.utils.get(server.channels, name="bench-lists")
+    if channel is None:
+        print("Couldn't connect to #bench-list")
+        return
+    # here we are in bench lists
+    messages = await channel.history(limit=200).flatten()
+    for msg in messages:
+        if word in msg.content:
+            print(msg.jump_url)
 
 # On message functionality to respond to messages in the appropriate channel from the appropriate user
 @client.event
