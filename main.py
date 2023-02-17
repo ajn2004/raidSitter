@@ -1,5 +1,6 @@
 import discord
 from bot_token import * # import secret file
+from benchList import *
 
  # defining intents
 intents = discord.Intents.default()
@@ -9,8 +10,7 @@ intents.message_content = True
 client = discord.Client(intents = intents)
 
 # Set the user to monitor
-WATCHED_USER = Balton # dis is for deego
-
+WATCHED_USER = Deego # dis is for deego
 
 # Event that is triggered when the bot is ready
 @client.event
@@ -39,27 +39,16 @@ async def on_ready():
     if channel is None:
         print("Couldn't connect to #bench-list")
         return
-    # here we are in bench lists
-    messages = [message async for message in channel.history()]
-    select_messages = [msg.content for msg in messages if msg.author.id == Deego]
-    with open('presynaptic_db','w+') as f:
-        for msg in messages:
-            if(msg.author.id == Deego):
-                try: # check to make sure we're looking at a date
-                    isaDate = int(msg.content[0])
-                    f.write(msg.content)
-                    f.write('\n')
-                except:
-                    pass
-        f.close()
-    
+    # Handle benchList channel
+    await manageBenchLists(channel)
+    return
 
 # On message functionality to respond to messages in the appropriate channel from the appropriate user
 @client.event
 async def on_message(message):
     if message.channel.name == "bots":
-        if message.author.id == Deego:
-            user = client.get_user(Deego)
+        if message.author.id == WATCHED_USER:
+            user = client.get_user(WATCHED_USER)
             print(message.content)
             await message.channel.send(f"Hey {user.mention}, did you say '{message.content}'?")
     print(message.content)
