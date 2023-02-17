@@ -40,19 +40,29 @@ async def on_ready():
         print("Couldn't connect to #bench-list")
         return
     # here we are in bench lists
-    messages = [message async for message in channel.history(limit=200)]
-    for msg in messages:
-        if(msg.author.id == Deego):
-            print(msg.content)
+    messages = [message async for message in channel.history()]
+    select_messages = [msg.content for msg in messages if msg.author.id == Deego]
+    with open('presynaptic_db','w+') as f:
+        for msg in messages:
+            if(msg.author.id == Deego):
+                try: # check to make sure we're looking at a date
+                    isaDate = int(msg.content[0])
+                    f.write(msg.content)
+                    f.write('\n')
+                except:
+                    pass
+        f.close()
+    
 
 # On message functionality to respond to messages in the appropriate channel from the appropriate user
 @client.event
 async def on_message(message):
     if message.channel.name == "bots":
-        if message.author.id == Balton:
-            user = client.get_user(Balton)
+        if message.author.id == Deego:
+            user = client.get_user(Deego)
             print(message.content)
             await message.channel.send(f"Hey {user.mention}, did you say '{message.content}'?")
+    print(message.content)
         
 # Run the bot
 client.run(token)
