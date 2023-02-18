@@ -53,19 +53,36 @@ def cleanPlayerList(playerList):
      
 def parseBenchMessage(message):
     # Inputs:
-    #   message: structured string to be parsed
+    #   message: formatted string to be parsed
     # Output:
     #   parseResults: a dict containing the parsed information from message
     # function to parse bench list log messages
     parseResults = {}
     lines = message.split('\n') # grab the lines of the message individually
     # date is contained in the first line, we assume a proper message at this point
-    parseResults['date'] = {'month': lines[0].split(' ')[0].split('-')[0],
-                            'day': lines[0].split(' ')[0].split('-')[1]}
-    parseResults['difficulty'] = lines[0][-4:-2]
+    parseResults['date'] = {'month': int(lines[0].split(' ')[0].split('-')[0]),
+                            'day': int(lines[0].split(' ')[0].split('-')[1])}
+    parseResults['difficulty'] = int(lines[0][-4:-2])
     print(lines[1:])
     parseResults['players'] = cleanPlayerList(lines[1:])
     return parseResults
+
+def buildSitLog(messages):
+    # Inputs:
+    #   messages: list of formatted string to be parsed
+    # Output:
+    #   parseResults: a dict containing the parsed information from message
+    # Build a list of parse objects containing relevant sit information
+    raidSitLog = []
+    for msg in messages:
+        try:
+            num = int(msg[0])
+            # print(msg)
+            raidSitLog.append(parseBenchMessage(msg))
+            # print(raidSitLog)
+        except:
+            pass
+    return raidSitLog
 
 async def manageBenchLists(channel, user = Deego, fileName = 'presynaptic_db', limit = None):
     # Inputs:
@@ -74,11 +91,7 @@ async def manageBenchLists(channel, user = Deego, fileName = 'presynaptic_db', l
     #  fileName: string representing file name to write channel data to
     #     limit: number of messages to limit the scope to
     messages = await getChannelMessages(channel, user = user, limit = limit)
-    for msg in messages:
-        try:
-            num = int(msg[0])
-            print(msg)
-            parseResults=parseBenchMessage(msg)
-            print(parseResults)
-        except:
-            pass
+    raidSitLog = buildSitLog(messages)
+    for log in raidSitLog:
+        print(log)
+        print('\n')
