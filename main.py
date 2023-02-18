@@ -11,7 +11,7 @@ client = discord.Client(intents = intents)
 
 # Set the user to monitor
 WATCHED_USER = Deego # dis is for deego
-
+playerNames = {}
 # Event that is triggered when the bot is ready
 @client.event
 async def on_ready():
@@ -40,9 +40,11 @@ async def on_ready():
         print("Couldn't connect to #bench-list")
         return
     # Handle benchList channel
-    await manageBenchLists(channel)
-    return
-
+    # await manageBenchLists(channel)
+    # Member Analysis
+    for member in server.members:
+        playerNames[member.id] = [member.nick or member.name, member.name or member.nick]
+    
 # On message functionality to respond to messages in the appropriate channel from the appropriate user
 @client.event
 async def on_message(message):

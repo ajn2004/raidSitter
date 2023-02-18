@@ -95,3 +95,4 @@ async def manageBenchLists(channel, user = Deego, fileName = 'presynaptic_db', l
     for log in raidSitLog:
         print(log)
         print('\n')
+    sitLog = updateSitRecords(raidSitLog)
