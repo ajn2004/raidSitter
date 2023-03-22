@@ -23,7 +23,6 @@ async def on_ready():
     if server is None:
         print("Server not found")
         return
-    channels = [1009788705902432276, 1023239799315902594]
     for ids in channels:        
         # Find the example-channel channel in the server
         channel = discord.utils.get(server.channels, id = ids)

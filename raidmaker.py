@@ -25,7 +25,6 @@ async def on_ready():
         return
 
     # Find the example-channel channel in the server
-    # channel = discord.utils.get(server.channels, id = 849871979326210069)
     channel = discord.utils.get(server.channels, name = "bots")
     if channel is None:
         print("Channel not found")
